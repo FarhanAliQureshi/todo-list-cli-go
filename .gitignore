@@ -38,3 +38,9 @@ go.work.sum
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+# 2024-10-30 Farhan: Added linux binary
+*.
+
+# 2024-10-30 Farhan: Probably, I should switch to community gitignore, in which
+# all files are ignored by default, and tracked files types are specifically mentioned
