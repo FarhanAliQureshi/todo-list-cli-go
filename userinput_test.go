@@ -7,9 +7,6 @@ import (
 )
 
 func TestPromptUserForMenuChoice(t *testing.T) {
-	// TODO: https://stackoverflow.com/questions/67363083/running-unit-tests-multiple-times-with-different-values-in-golang
-	// TODO: https://www.kelche.co/blog/go/golang-tests/
-
 	tests := []struct {
 		testName, input      string
 		rangeStart, rangeEnd int
@@ -51,68 +48,4 @@ func TestPromptUserForMenuChoice(t *testing.T) {
 			}
 		})
 	}
-
-	// // Empty input
-	// input := "\n"
-	// reader := strings.NewReader(input)
-	// _, err := promptUserForMenuChoice(reader, 1, 5)
-	// if err == nil {
-	// 	t.Error("Empty Input. Expecting error but got nil")
-	// }
-
-	// // Giving input which is out-of-range of choices
-	// input = "6\n"
-	// reader = strings.NewReader(input)
-	// _, err = promptUserForMenuChoice(reader, 1, 5)
-	// if err == nil {
-	// 	t.Error("Input: 6. Range 1 to 5. Expecting error but got nil")
-	// }
-	// input = "0\n"
-	// reader = strings.NewReader(input)
-	// _, err = promptUserForMenuChoice(reader, 1, 3)
-	// if err == nil {
-	// 	t.Error("Input: 0. Range 1 to 5. Expecting error but got nil")
-	// }
-
-	// // Out-of-range input with negative and positive signs
-	// input = "-1\n"
-	// reader = strings.NewReader(input)
-	// _, err = promptUserForMenuChoice(reader, 1, 3)
-	// if err == nil {
-	// 	t.Error("Input: -1. Range 1 to 3. Expecting error but got nil")
-	// }
-	// input = "+4\n"
-	// reader = strings.NewReader(input)
-	// _, err = promptUserForMenuChoice(reader, 1, 3)
-	// if err == nil {
-	// 	t.Error("Input: +4. Range 1 to 3. Expecting error but got nil")
-	// }
-
-	// // Edge cases of correct input range
-	// input = "1\n"
-	// reader = strings.NewReader(input)
-	// output, err := promptUserForMenuChoice(reader, 1, 5)
-	// if err != nil {
-	// 	t.Error(err)
-	// }
-	// if output != 1 {
-	// 	t.Error("Expecting 1, but got:", output)
-	// }
-	// input = "5\n"
-	// reader = strings.NewReader(input)
-	// output, err = promptUserForMenuChoice(reader, 1, 5)
-	// if err != nil {
-	// 	t.Error(err)
-	// }
-	// if output != 5 {
-	// 	t.Error("Expecting 5, but got:", output)
-	// }
-
-	// // String input instead of a number (integer)
-	// input = "asdf\n"
-	// reader = strings.NewReader(input)
-	// _, err = promptUserForMenuChoice(reader, 1, 5)
-	// if err == nil {
-	// 	t.Error("Expecting error but got nil")
-	// }
 }

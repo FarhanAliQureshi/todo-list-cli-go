@@ -41,7 +41,7 @@ func promptUserForMenuChoice(reader io.Reader, validFrom int, validTo int) (int,
 		return -1, err
 	} else if choice < validFrom || choice > validTo {
 		fmt.Println("Invalid choice")
-		return -1, errors.New("Invalid choice")
+		return -1, errors.New("invalid choice")
 	}
 
 	// By this point, user's choice must be between >= validFrom and <= validTo
