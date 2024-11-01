@@ -48,3 +48,9 @@ func promptUserForMenuChoice(reader io.Reader, validFrom int, validTo int) (int,
 	// Therefore, it is a valid input, and let's return it to the calling func
 	return choice, nil
 }
+
+func PauseProgramToLetUserRead() {
+	fmt.Print("Press Enter key to continue...")
+	var discard string
+	fmt.Scanln(&discard)
+}
