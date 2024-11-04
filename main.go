@@ -17,10 +17,9 @@ func main() {
 		userSelection = GetUserMenuChoice(0, 4)
 		//fmt.Printf("User selected: %d\n", userSelection)
 		if userSelection == 1 {
-			displayTitlesOfTodoLists(todos)
-			fmt.Println("")
+			displayTitlesOfTodoLists(todos, true)
 		} else if userSelection == 2 {
-			displayTodoListItems(todos)
+			displayTodoListItems(todos, true)
 		} else if userSelection == 0 {
 			// Break the loop and gracefully end the program
 			break
@@ -41,10 +40,14 @@ func displayMainMenu() {
 	fmt.Println("")
 }
 
-func displayTitlesOfTodoLists(todos []todo) {
+func displayTitlesOfTodoLists(todos []todo, pause bool) {
 	fmt.Printf("\nTitles of all Todo Lists:\n\n")
 	for index, item := range todos {
 		fmt.Printf("%d. %s\n", index+1, item.name)
+	}
+	if pause {
+		fmt.Println("")
+		PauseProgramToLetUserRead()
 	}
 }
 
@@ -58,10 +61,10 @@ func loadTodoListsFromFile(filename string) []todo {
 	return todos
 }
 
-func displayTodoListItems(todos []todo) {
+func displayTodoListItems(todos []todo, pause bool) {
 	fmt.Println("")
 	fmt.Println("Select a Todo List to list all its items")
-	displayTitlesOfTodoLists(todos)
+	displayTitlesOfTodoLists(todos, false)
 	fmt.Println("0. Main Menu")
 	fmt.Println("")
 
@@ -83,7 +86,9 @@ func displayTodoListItems(todos []todo) {
 			}
 			fmt.Printf("%d. %s %s\n", index+1, completed, item.name)
 		}
-		fmt.Println("")
-		PauseProgramToLetUserRead()
+		if pause {
+			fmt.Println("")
+			PauseProgramToLetUserRead()
+		}
 	}
 }
