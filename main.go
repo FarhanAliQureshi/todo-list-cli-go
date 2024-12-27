@@ -33,9 +33,9 @@ func displayMainMenu() {
 	fmt.Println("")
 	fmt.Println("1. List titles of all Todo Lists")
 	fmt.Println("2. Display all items of a Todo List")
-	fmt.Println("2. Create a new Todo List ")
-	fmt.Println("3. Add items to a Todo List")
-	fmt.Println("4. Delete a Todo List")
+	fmt.Println("3. Create a new Todo List ")
+	fmt.Println("4. Add items to a Todo List")
+	fmt.Println("5. Delete a Todo List")
 	fmt.Println("0. Exit")
 	fmt.Println("")
 }
