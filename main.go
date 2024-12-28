@@ -14,12 +14,13 @@ func main() {
 
 	for {
 		displayMainMenu()
-		userSelection = GetUserMenuChoice(0, 4)
-		//fmt.Printf("User selected: %d\n", userSelection)
+		userSelection = GetUserMenuChoice(0, 5)
 		if userSelection == 1 {
 			displayTitlesOfTodoLists(todos, true)
 		} else if userSelection == 2 {
 			displayTodoListItems(todos, true)
+		} else if userSelection == 3 {
+			todos = createNewTodoList(todos)
 		} else if userSelection == 0 {
 			// Break the loop and gracefully end the program
 			break
@@ -33,7 +34,7 @@ func displayMainMenu() {
 	fmt.Println("")
 	fmt.Println("1. List titles of all Todo Lists")
 	fmt.Println("2. Display all items of a Todo List")
-	fmt.Println("3. Create a new Todo List ")
+	fmt.Println("3. Create a new Todo List")
 	fmt.Println("4. Add items to a Todo List")
 	fmt.Println("5. Delete a Todo List")
 	fmt.Println("0. Exit")
@@ -91,4 +92,19 @@ func displayTodoListItems(todos []todo, pause bool) {
 			PauseProgramToLetUserRead()
 		}
 	}
+}
+
+func createNewTodoList(todos []todo) []todo {
+	fmt.Println("")
+	fmt.Println("Create New Todo List")
+	fmt.Println("")
+	fmt.Println("(Press Enter key without writing anything to cancel)")
+	newTodoListName := GetInputFromUser("Enter Name for New Todo List: ")
+	if newTodoListName != "" {
+		todoList := todo{}
+		todoList.name = newTodoListName
+		todos = append(todos, todoList)
+	}
+
+	return todos
 }

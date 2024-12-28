@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -53,4 +54,19 @@ func PauseProgramToLetUserRead() {
 	fmt.Print("Press Enter key to continue...")
 	var discard string
 	fmt.Scanln(&discard)
+}
+
+func GetInputFromUser(prompt string) string {
+	var userInput string
+
+	fmt.Print(prompt)
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		userInput = scanner.Text()
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error occurred reading Stdin: ", err)
+	}
+
+	return userInput
 }
