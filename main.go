@@ -21,6 +21,8 @@ func main() {
 			displayTodoListItems(todos, true)
 		} else if userSelection == 3 {
 			todos = createNewTodoList(todos)
+		} else if userSelection == 5 {
+			todos = deleteTodoList(todos)
 		} else if userSelection == 0 {
 			// Break the loop and gracefully end the program
 			break
@@ -96,7 +98,7 @@ func displayTodoListItems(todos []todo, pause bool) {
 
 func createNewTodoList(todos []todo) []todo {
 	fmt.Println("")
-	fmt.Println("Create New Todo List")
+	fmt.Println("Create a New Todo List")
 	fmt.Println("")
 	fmt.Println("(Press Enter key without writing anything to cancel)")
 	newTodoListName := GetInputFromUser("Enter Name for New Todo List: ")
@@ -104,6 +106,24 @@ func createNewTodoList(todos []todo) []todo {
 		todoList := todo{}
 		todoList.name = newTodoListName
 		todos = append(todos, todoList)
+	}
+
+	return todos
+}
+
+func deleteTodoList(todos []todo) []todo {
+	fmt.Println("")
+	fmt.Println("Delete a Todo List")
+	displayTitlesOfTodoLists(todos, false)
+	fmt.Println("0. Cancel")
+	fmt.Println("")
+	fmt.Println("Select a Todo List to delete")
+	userSelection := GetUserMenuChoice(0, len(todos))
+
+	if userSelection > 0 {
+		index := userSelection - 1
+		fmt.Printf("Deleting \"%s\" ...\n", todos[index].name)
+		return append(todos[:index], todos[index+1:]...)
 	}
 
 	return todos
