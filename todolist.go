@@ -14,6 +14,9 @@ type todo struct {
 
 func parseStringAndCreateTodoLists(data string) []todo {
 	todos := []todo{}
+	// Before splitting the data into lines, remove CR from newline because in
+	// Windows newline is CRLF, while in Linux newline is just CR
+	data = strings.ReplaceAll(data, "\r", "")
 	lines := strings.Split(data, "\n")
 	todoList := todo{}
 
@@ -39,21 +42,15 @@ func parseStringAndCreateTodoLists(data string) []todo {
 			// Create new todo list
 			todoList = todo{}
 			todoList.name = string([]rune(line))[2:]
-			// Remove CR character from the end
-			todoList.name = todoList.name[:len(todoList.name)-1]
 
 		} else if string(line[0]) == "-" {
 			// List item which is not yet completed
 			listItem := item{string([]rune(line))[2:], false}
-			// Remove CR character from the end
-			listItem.name = listItem.name[:len(listItem.name)-1]
 			todoList.items = append(todoList.items, listItem)
 
 		} else if string(line[0]) == "+" {
 			// List item which is completed
 			listItem := item{string([]rune(line))[2:], true}
-			// Remove CR character from the end
-			listItem.name = listItem.name[:len(listItem.name)-1]
 			todoList.items = append(todoList.items, listItem)
 		}
 	}
