@@ -15,7 +15,7 @@ type todo struct {
 func parseStringAndCreateTodoLists(data string) []todo {
 	todos := []todo{}
 	// Before splitting the data into lines, remove CR from newline because in
-	// Windows newline is CRLF, while in Linux newline is just CR
+	// Windows newline is CRLF, while in Linux newline is just LF
 	data = strings.ReplaceAll(data, "\r", "")
 	lines := strings.Split(data, "\n")
 	todoList := todo{}

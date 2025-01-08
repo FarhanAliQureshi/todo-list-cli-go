@@ -14,7 +14,7 @@ func main() {
 
 	for {
 		displayMainMenu()
-		userSelection = GetUserMenuChoice(0, 5)
+		userSelection = GetUserMenuChoice(0, 6)
 		if userSelection == 1 { // Menu: List titles of all Todo Lists
 			displayTitlesOfTodoLists(todos, true)
 		} else if userSelection == 2 { // Menu: Display all items of a Todo List
@@ -25,6 +25,8 @@ func main() {
 			todos = manageTodoList(todos)
 		} else if userSelection == 5 { // Menu: Delete a Todo List
 			todos = deleteTodoList(todos)
+		} else if userSelection == 6 { // Menu: Save changes to file on disk
+			saveTodoListToFile(todos)
 		} else if userSelection == 0 { // Menu: Exit
 			// Break the loop and gracefully end the program
 			break
@@ -41,6 +43,7 @@ func displayMainMenu() {
 	fmt.Println("3. Create a new Todo List")
 	fmt.Println("4. Manage a Todo List")
 	fmt.Println("5. Delete a Todo List")
+	fmt.Println("6. Save changes to file on disk")
 	fmt.Println("0. Exit")
 	fmt.Println("")
 }
@@ -234,4 +237,29 @@ func deleteTodoListItem(todos []todo, selectedListIndex int) []todo {
 	}
 
 	return todos
+}
+
+func saveTodoListToFile(todos []todo) {
+	var buffer, status string
+
+	for _, todoList := range todos {
+		buffer = fmt.Sprintln(buffer + "# " + todoList.name)
+		for _, item := range todoList.items {
+			if item.completed {
+				status = "+"
+			} else {
+				status = "-"
+			}
+			buffer = fmt.Sprintln(buffer + status + " " + item.name)
+		}
+		// Add an empty line after each Todo List
+		buffer = fmt.Sprintln(buffer)
+	}
+
+	err := WriteDataFile(TODOLIST_FILENAME, buffer)
+	if err != nil {
+		fmt.Println("Error writing to file: " + TODOLIST_FILENAME)
+	} else {
+		fmt.Println("Saved Todo Lists to file: " + TODOLIST_FILENAME)
+	}
 }
