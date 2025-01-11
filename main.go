@@ -17,8 +17,8 @@ func main() {
 		userSelection = GetUserMenuChoice(0, 6)
 		if userSelection == 1 { // Menu: List titles of all Todo Lists
 			displayTitlesOfTodoLists(todos, true)
-		} else if userSelection == 2 { // Menu: Display all items of a Todo List
-			displayTodoListItems(todos, true)
+		} else if userSelection == 2 { // Menu: Display all tasks of a Todo List
+			displayTodoListTasks(todos, true)
 		} else if userSelection == 3 { // Menu: Create a new Todo List
 			todos = createNewTodoList(todos)
 		} else if userSelection == 4 { // Menu: Manage a Todo List
@@ -39,7 +39,7 @@ func displayMainMenu() {
 	fmt.Println("Todo List CLI in Golang")
 	fmt.Println("")
 	fmt.Println("1. List titles of all Todo Lists")
-	fmt.Println("2. Display all items of a Todo List")
+	fmt.Println("2. Display all tasks of a Todo List")
 	fmt.Println("3. Create a new Todo List")
 	fmt.Println("4. Manage a Todo List")
 	fmt.Println("5. Delete a Todo List")
@@ -50,8 +50,8 @@ func displayMainMenu() {
 
 func displayTitlesOfTodoLists(todos []todo, pause bool) {
 	fmt.Printf("\nTitles of all Todo Lists:\n\n")
-	for index, item := range todos {
-		fmt.Printf("%d. %s\n", index+1, item.name)
+	for index, listTask := range todos {
+		fmt.Printf("%d. %s\n", index+1, listTask.name)
 	}
 	if pause {
 		fmt.Println("")
@@ -69,9 +69,9 @@ func loadTodoListsFromFile(filename string) []todo {
 	return todos
 }
 
-func displayTodoListItems(todos []todo, pause bool) {
+func displayTodoListTasks(todos []todo, pause bool) {
 	fmt.Println("")
-	fmt.Println("Select a Todo List to list all its items")
+	fmt.Println("Select a Todo List to list all its tasks")
 	displayTitlesOfTodoLists(todos, false)
 	fmt.Println("0. Main Menu")
 	fmt.Println("")
@@ -85,7 +85,7 @@ func displayTodoListItems(todos []todo, pause bool) {
 
 		fmt.Println("")
 		fmt.Printf("Selected Todo List: %s\n", todos[selectedListIndex].name)
-		displayTodoListItemsOfSelectedList(todos, selectedListIndex)
+		displayTodoListTasksOfSelectedList(todos, selectedListIndex)
 		if pause {
 			fmt.Println("")
 			PauseProgramToLetUserRead()
@@ -139,16 +139,16 @@ func manageTodoList(todos []todo) []todo {
 		for {
 			displayManageTodoListMenu(todos, selectedListIndex)
 			userSelection = GetUserMenuChoice(0, 5)
-			if userSelection == 1 { // Menu: Display items of the todo list
-				displayTodoListItemsOfSelectedList(todos, selectedListIndex)
-			} else if userSelection == 2 { // Menu: Mark an item as completed
-				todos = changeStatusOfTodoListItem(todos, selectedListIndex, true)
-			} else if userSelection == 3 { // Menu: Mark an item as incomplete
-				todos = changeStatusOfTodoListItem(todos, selectedListIndex, false)
-			} else if userSelection == 4 { // Menu: Add an item to todo list
-				todos = addNewTodoListItem(todos, selectedListIndex)
-			} else if userSelection == 5 { // Menu: Delete an item from todo list
-				todos = deleteTodoListItem(todos, selectedListIndex)
+			if userSelection == 1 { // Menu: Display tasks of the todo list
+				displayTodoListTasksOfSelectedList(todos, selectedListIndex)
+			} else if userSelection == 2 { // Menu: Mark a task as completed
+				todos = changeStatusOfTodoListTask(todos, selectedListIndex, true)
+			} else if userSelection == 3 { // Menu: Mark a task as incomplete
+				todos = changeStatusOfTodoListTask(todos, selectedListIndex, false)
+			} else if userSelection == 4 { // Menu: Add a task to todo list
+				todos = addNewTodoListTask(todos, selectedListIndex)
+			} else if userSelection == 5 { // Menu: Delete a task from todo list
+				todos = deleteTodoListTask(todos, selectedListIndex)
 			} else if userSelection == 0 { // Menu: Back to Main Menu
 				break
 			}
@@ -162,30 +162,30 @@ func displayManageTodoListMenu(todos []todo, selectedListIndex int) {
 	fmt.Println("")
 	fmt.Printf("Managing Todo List: %s\n", todos[selectedListIndex].name)
 	fmt.Println("")
-	fmt.Println("1. Display items of the todo list")
-	fmt.Println("2. Mark an item as completed")
-	fmt.Println("3. Mark an item as incomplete")
-	fmt.Println("4. Add an item to todo list")
-	fmt.Println("5. Delete an item from todo list")
+	fmt.Println("1. Display tasks of the todo list")
+	fmt.Println("2. Mark a task as completed")
+	fmt.Println("3. Mark a task as incomplete")
+	fmt.Println("4. Add a task to todo list")
+	fmt.Println("5. Delete a task from todo list")
 	fmt.Println("0. Back to Main Menu")
 	fmt.Println("")
 }
 
-func displayTodoListItemsOfSelectedList(todos []todo, selectedListIndex int) {
+func displayTodoListTasksOfSelectedList(todos []todo, selectedListIndex int) {
 	fmt.Println("")
-	fmt.Printf("Todo List Items for: %s\n", todos[selectedListIndex].name)
-	for index, item := range todos[selectedListIndex].items {
+	fmt.Printf("Todo List Tasks for: %s\n", todos[selectedListIndex].name)
+	for index, listTask := range todos[selectedListIndex].tasks {
 		var completed string
-		if item.completed {
+		if listTask.completed {
 			completed = "+"
 		} else {
 			completed = "-"
 		}
-		fmt.Printf("%d. %s %s\n", index+1, completed, item.name)
+		fmt.Printf("%d. %s %s\n", index+1, completed, listTask.name)
 	}
 }
 
-func changeStatusOfTodoListItem(todos []todo, selectedListIndex int, markCompleted bool) []todo {
+func changeStatusOfTodoListTask(todos []todo, selectedListIndex int, markCompleted bool) []todo {
 	var changeStatus string
 	if markCompleted {
 		changeStatus = "completed"
@@ -193,47 +193,47 @@ func changeStatusOfTodoListItem(todos []todo, selectedListIndex int, markComplet
 		changeStatus = "incomplete"
 	}
 	fmt.Println("")
-	fmt.Printf("Select an item to mark as %s\n", changeStatus)
-	displayTodoListItemsOfSelectedList(todos, selectedListIndex)
+	fmt.Printf("Select a task to mark as %s\n", changeStatus)
+	displayTodoListTasksOfSelectedList(todos, selectedListIndex)
 	fmt.Println("0. Cancel")
 	fmt.Println("")
-	userSelection := GetUserMenuChoice(0, len(todos[selectedListIndex].items))
+	userSelection := GetUserMenuChoice(0, len(todos[selectedListIndex].tasks))
 
 	if userSelection != 0 {
-		selectedItem := userSelection - 1
-		todos[selectedListIndex].items[selectedItem].completed = markCompleted
+		selectedTask := userSelection - 1
+		todos[selectedListIndex].tasks[selectedTask].completed = markCompleted
 	}
 	return todos
 }
 
-func addNewTodoListItem(todos []todo, selectedListIndex int) []todo {
+func addNewTodoListTask(todos []todo, selectedListIndex int) []todo {
 	fmt.Println("")
-	fmt.Println("Add a New Item")
+	fmt.Println("Add a New Task")
 	fmt.Println("")
 	fmt.Println("(Press Enter key without writing anything to cancel)")
-	newItemName := GetInputFromUser("Enter Item Name: ")
-	if newItemName != "" {
-		newItem := item{}
-		newItem.name = newItemName
-		todos[selectedListIndex].items = append(todos[selectedListIndex].items, newItem)
+	newTaskName := GetInputFromUser("Enter Task Task: ")
+	if newTaskName != "" {
+		newTask := task{}
+		newTask.name = newTaskName
+		todos[selectedListIndex].tasks = append(todos[selectedListIndex].tasks, newTask)
 	}
 
 	return todos
 }
 
-func deleteTodoListItem(todos []todo, selectedListIndex int) []todo {
+func deleteTodoListTask(todos []todo, selectedListIndex int) []todo {
 	fmt.Println("")
-	fmt.Println("Delete a Todo List's Item")
-	displayTodoListItemsOfSelectedList(todos, selectedListIndex)
+	fmt.Println("Delete a Todo List's Task")
+	displayTodoListTasksOfSelectedList(todos, selectedListIndex)
 	fmt.Println("0. Cancel")
 	fmt.Println("")
-	fmt.Println("Select a Todo List's Item to delete")
-	userSelection := GetUserMenuChoice(0, len(todos[selectedListIndex].items))
+	fmt.Println("Select a Todo List's Task to delete")
+	userSelection := GetUserMenuChoice(0, len(todos[selectedListIndex].tasks))
 
 	if userSelection > 0 {
 		index := userSelection - 1
-		fmt.Printf("Deleting \"%s\" ...\n", todos[selectedListIndex].items[index].name)
-		todos[selectedListIndex].items = append(todos[selectedListIndex].items[:index], todos[selectedListIndex].items[index+1:]...)
+		fmt.Printf("Deleting \"%s\" ...\n", todos[selectedListIndex].tasks[index].name)
+		todos[selectedListIndex].tasks = append(todos[selectedListIndex].tasks[:index], todos[selectedListIndex].tasks[index+1:]...)
 	}
 
 	return todos
@@ -244,13 +244,13 @@ func saveTodoListToFile(todos []todo) {
 
 	for _, todoList := range todos {
 		buffer = fmt.Sprintln(buffer + "# " + todoList.name)
-		for _, item := range todoList.items {
-			if item.completed {
+		for _, listTask := range todoList.tasks {
+			if listTask.completed {
 				status = "+"
 			} else {
 				status = "-"
 			}
-			buffer = fmt.Sprintln(buffer + status + " " + item.name)
+			buffer = fmt.Sprintln(buffer + status + " " + listTask.name)
 		}
 		// Add an empty line after each Todo List
 		buffer = fmt.Sprintln(buffer)

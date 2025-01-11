@@ -2,14 +2,14 @@ package main
 
 import "strings"
 
-type item struct {
+type task struct {
 	name      string
 	completed bool
 }
 
 type todo struct {
 	name  string
-	items []item
+	tasks []task
 }
 
 func parseStringAndCreateTodoLists(data string) []todo {
@@ -26,7 +26,7 @@ func parseStringAndCreateTodoLists(data string) []todo {
 			continue
 
 		} else if len([]rune(line)) < 3 {
-			// There will be a space between indicator and text (item or title)
+			// There will be a space between indicator and text (task or title)
 			// Therefore, a line must have at least 3 characters to be a valid
 			// entry for todo list. Ignore all lines with less than 3 characters.
 			// Using rune to count for Unicode characters.
@@ -44,14 +44,14 @@ func parseStringAndCreateTodoLists(data string) []todo {
 			todoList.name = string([]rune(line))[2:]
 
 		} else if string(line[0]) == "-" {
-			// List item which is not yet completed
-			listItem := item{string([]rune(line))[2:], false}
-			todoList.items = append(todoList.items, listItem)
+			// List task which is not yet completed
+			todoTask := task{string([]rune(line))[2:], false}
+			todoList.tasks = append(todoList.tasks, todoTask)
 
 		} else if string(line[0]) == "+" {
-			// List item which is completed
-			listItem := item{string([]rune(line))[2:], true}
-			todoList.items = append(todoList.items, listItem)
+			// List task which is completed
+			todoTask := task{string([]rune(line))[2:], true}
+			todoList.tasks = append(todoList.tasks, todoTask)
 		}
 	}
 
